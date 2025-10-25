@@ -8,11 +8,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private FloatingJoystick floatingJoystick;
+    [SerializeField] private PlayerAnimationsController playerAnimationsController;
 
     private Vector3 input;
     private Rigidbody rb;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
@@ -34,5 +35,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, 0.2f);
         }
+        playerAnimationsController.ChangeAnimation("Walk", moveDirection.magnitude);
     }
 }
