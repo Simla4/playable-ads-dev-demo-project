@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 6969009879521010774}
   - component: {fileID: 1035272765254489132}
   - component: {fileID: 2120168938882688645}
+  - component: {fileID: 9194951173022354620}
   m_Layer: 0
   m_Name: PlayerParent
   m_TagString: Untagged
@@ -113,9 +114,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &2120168938882688645
 MonoBehaviour:
@@ -132,6 +133,18 @@ MonoBehaviour:
   moveSpeed: 5
   floatingJoystick: {fileID: 0}
   playerAnimationsController: {fileID: 931815914856188461}
+--- !u!114 &9194951173022354620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411522058093822764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af24fc37796f3483fac32d3fef74e047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &866414843695661530
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,27 +10,22 @@ public class CurencyTextChanger : MonoBehaviour
     [SerializeField] private TextMeshProUGUI curenccyText;
     [SerializeField] private float duration = 0.25f;
     
-    private EventListener<CurencyManagementEvent> onCurencyChanged;
+    private EventListener<ChangeUITextEvent> onCurencyChanged;
 
     private void OnEnable()
     {
-        onCurencyChanged = new EventListener<CurencyManagementEvent>(ChangeText);
-        EventBus<CurencyManagementEvent>.AddListener(onCurencyChanged);
+        onCurencyChanged = new EventListener<ChangeUITextEvent>(ChangeText);
+        EventBus<ChangeUITextEvent>.AddListener(onCurencyChanged);
     }
 
     private void OnDisable()
     {
-        EventBus<CurencyManagementEvent>.RemoveListener(onCurencyChanged);
+        EventBus<ChangeUITextEvent>.RemoveListener(onCurencyChanged);
     }
 
 
-    private void ChangeText(CurencyManagementEvent e)
+    private void ChangeText(ChangeUITextEvent e)
     {
-        StartCoroutine(ChangeTextRoutine(e.amount));
-    }
-
-    private IEnumerator ChangeTextRoutine(int amount)
-    {
-        yield return new WaitForSeconds(duration);
+        curenccyText.text = e.amount.ToString();
     }
 }
