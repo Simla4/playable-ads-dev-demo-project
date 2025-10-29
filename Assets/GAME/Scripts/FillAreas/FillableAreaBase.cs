@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using sb.eventbus;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class FillableAreaBase : MonoBehaviour, IFillable
@@ -15,6 +14,8 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
     
     public void FillArea(int amount)
     {
+        if(cost <= 0) return;
+        
         StartCoroutine(FillAreaRoutine(amount));
     }
 
@@ -31,6 +32,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
             if (cost <= 0)
             {
                 unlockedArea.SetActive(true);
+                canContinueFilling = false;
             }
         }
     }
