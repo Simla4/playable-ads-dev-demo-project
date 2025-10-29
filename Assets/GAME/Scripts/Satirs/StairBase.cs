@@ -10,17 +10,20 @@ public class StairBase : MonoBehaviour
     [SerializeField] private Transform endPosition;
     [SerializeField] private GameObject stepPrefab;
 
-    [Header("Settings")] 
-    [SerializeField] private int stepCount;
+    [Header("Settings")]
     [SerializeField] private float stepSpacing;
     [SerializeField] private float moveSpeed;
     
     private List<Transform> steps = new List<Transform>();
     private Vector3 moveDirection;
     private float escalatorLength;
+    private Pool<StairStepBase> stairStepPool;
+    private int stepCount;
 
     private void Start()
     {
+        stairStepPool = PoolManager.Instance.stairStepPool;
+        
         InitializeEscalator();
     }
 
