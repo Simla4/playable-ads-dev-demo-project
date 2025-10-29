@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class CustomerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Move()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Move");
+        gameObject.SetActive(false);
     }
 }

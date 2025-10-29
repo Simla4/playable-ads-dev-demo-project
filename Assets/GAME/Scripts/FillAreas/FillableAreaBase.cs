@@ -66,7 +66,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
     }
     
 
-    public void StopFilling()
+    public virtual void StopFilling()
     {
         canContinueFilling = false;
     }

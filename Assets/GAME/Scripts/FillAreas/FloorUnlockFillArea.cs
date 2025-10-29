@@ -9,7 +9,7 @@ public class FloorUnlockFillArea : FillableAreaBase
     
     protected new void Start()
     {
-        base.Start();
+        
         if (!PlayerPrefs.HasKey(FLOOR_UNLOCK_FILL_AREA_NAME))
         {
             PlayerPrefs.SetInt(FLOOR_UNLOCK_FILL_AREA_NAME, fillableAreaData.targetCost);
@@ -17,11 +17,14 @@ public class FloorUnlockFillArea : FillableAreaBase
         }
         
         cost = PlayerPrefs.GetInt(FLOOR_UNLOCK_FILL_AREA_NAME);
+        
+        base.Start();
     }
 
-    public new void StopFilling()
+    public override void StopFilling()
     {
         base.StopFilling();
+        
         PlayerPrefs.SetInt(FLOOR_UNLOCK_FILL_AREA_NAME, cost);
 
     }
