@@ -8,7 +8,6 @@ using UnityEngine;
 public class CurencyTextChanger : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI curenccyText;
-    [SerializeField] private float duration = 0.25f;
     
     private EventListener<ChangeUITextEvent> onCurencyChanged;
 
