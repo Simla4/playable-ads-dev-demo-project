@@ -68,7 +68,11 @@ public class BaggageDropArea : MonoBehaviour, IFillable
 
     private void TransferBaggage(BaggageTransferEvent e)
     {
-        if(baggages.Count <= 0) return;
+        if (baggages.Count <= 0)
+        {
+            EventBus<AllBaggagesTransferredEvent>.Emit(new AllBaggagesTransferredEvent());
+            return;
+        }
         
         var targetBaggage = baggages[0];
         targetBaggage.Move(endTransform, speed);

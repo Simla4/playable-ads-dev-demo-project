@@ -26,8 +26,6 @@ public class CheckOutArea : MonoBehaviour, IFillable
             EventBus<OnGetPlaneEvent>.Emit(new OnGetPlaneEvent());
             EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(prize));
             
-            Debug.Log("TakeBaggageRoutine While");
-            
             yield return new WaitForSeconds(speed);
         }
     }
