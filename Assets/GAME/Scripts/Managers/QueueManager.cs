@@ -14,12 +14,15 @@ public class QueueManager : MonoBehaviour
     [Header("Queues")]
     [SerializeField] private List<Transform> baggageQueueList;
     [SerializeField] private List<Transform> checkOutQueueList;
-    [SerializeField] private Transform stairPosition;
+    [SerializeField] private Transform deskPosition;
+    [SerializeField] private Transform planePosition;
     
     private List<CustomerController> baggageQueueCustomers = new List<CustomerController>();
     private List<CustomerController> checkOutQueueCustomers = new List<CustomerController>();
     private EventListener<OnTakeBaggageEvent> onTakeBaggage;
-    private int index = 0;
+    private EventListener<OnGetPlaneEvent> onGetPlane;
+    private EventListener<OnTargetListOverEvent> onTargetListOver;
+    private int checkOutTargetIndex = 0;
 
 
     private void Start()
@@ -29,13 +32,21 @@ public class QueueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        onTakeBaggage = new EventListener<OnTakeBaggageEvent>(AdvanceQueue);
+        onTakeBaggage = new EventListener<OnTakeBaggageEvent>(AdvanceBaggageQueue);
         EventBus<OnTakeBaggageEvent>.AddListener(onTakeBaggage);
+
+        onGetPlane = new EventListener<OnGetPlaneEvent>(AdvenceCheckOutQueue);
+        EventBus<OnGetPlaneEvent>.AddListener(onGetPlane);
+
+        onTargetListOver = new EventListener<OnTargetListOverEvent>(PlaceCheckOutQueue);
+        EventBus<OnTargetListOverEvent>.AddListener(onTargetListOver);
     }
 
     private void OnDisable()
     {
         EventBus<OnTakeBaggageEvent>.RemoveListener(onTakeBaggage);
+        EventBus<OnGetPlaneEvent>.RemoveListener(onGetPlane);
+        EventBus<OnTargetListOverEvent>.RemoveListener(onTargetListOver);
     }
 
 
@@ -44,25 +55,48 @@ public class QueueManager : MonoBehaviour
         for (int i = 0; i < customerCount; i++)
         {
             var customer = Instantiate(customerPrefab, baggageQueueList[i].position, baggageQueueList[i].rotation);
-            Debug.Log(baggageQueueList[i].position);
             
             baggageQueueCustomers.Add(customer);
         }
     }
 
-    private void AdvanceQueue(OnTakeBaggageEvent e)
+    private void AdvanceBaggageQueue(OnTakeBaggageEvent e)
     {
         if(baggageQueueCustomers.Count <= 0) return;
+
+        var targetCustomer = baggageQueueCustomers[0];
         
-        
-        baggageQueueCustomers[0].Move(stairPosition);
-        checkOutQueueCustomers.Add(baggageQueueCustomers[0]);
-        Debug.Log(baggageQueueCustomers[0].name + "deleted");
+        targetCustomer.Move(deskPosition);
+        targetCustomer.IsDropedBaggage = true;
+        checkOutQueueCustomers.Add(targetCustomer);
         baggageQueueCustomers.RemoveAt(0);
 
         for (int i = 0; i < baggageQueueCustomers.Count; i++)
         {
             baggageQueueCustomers[i].Move(baggageQueueList[i]);
         }
+    }
+
+    private void PlaceCheckOutQueue(OnTargetListOverEvent e)
+    {
+        checkOutQueueCustomers[checkOutTargetIndex].Move(checkOutQueueList[checkOutTargetIndex]);
+        checkOutQueueCustomers[checkOutTargetIndex].CanFly = true;
+        checkOutTargetIndex++;
+    }
+
+    private void AdvenceCheckOutQueue(OnGetPlaneEvent e)
+    {
+        var targetCustomer = checkOutQueueCustomers[0];
+        
+        if(!targetCustomer.CanFly) return;
+        
+        targetCustomer.Move(planePosition);
+        checkOutQueueCustomers.RemoveAt(0);
+
+        for (int i = 0; i < checkOutQueueCustomers.Count; i++)
+        {
+            checkOutQueueCustomers[i].Move(checkOutQueueList[i]);
+        }
+        
     }
 }
