@@ -66,8 +66,8 @@ public class QueueManager : MonoBehaviour
 
         var targetCustomer = baggageQueueCustomers[0];
         
-        targetCustomer.Move(deskPosition);
         targetCustomer.IsDropedBaggage = true;
+        targetCustomer.Move(deskPosition);
         checkOutQueueCustomers.Add(targetCustomer);
         baggageQueueCustomers.RemoveAt(0);
 
@@ -86,6 +86,8 @@ public class QueueManager : MonoBehaviour
 
     private void AdvenceCheckOutQueue(OnGetPlaneEvent e)
     {
+        if(checkOutQueueCustomers.Count <= 0) return;
+        
         var targetCustomer = checkOutQueueCustomers[0];
         
         if(!targetCustomer.CanFly) return;

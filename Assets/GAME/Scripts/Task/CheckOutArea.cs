@@ -13,16 +13,20 @@ public class CheckOutArea : MonoBehaviour, IFillable
     public void FillArea(int amount)
     {
         StartCoroutine(TakeBaggageRoutine());
+        Debug.Log("FillArea");
     }
 
     private IEnumerator TakeBaggageRoutine()
     {
         canContinue = true;
+        Debug.Log("TakeBaggageRoutine");
         
         while (canContinue)
         {
             EventBus<OnGetPlaneEvent>.Emit(new OnGetPlaneEvent());
             EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(prize));
+            
+            Debug.Log("TakeBaggageRoutine While");
             
             yield return new WaitForSeconds(speed);
         }
