@@ -12,6 +12,11 @@ public class PlayerCollisionController : MonoBehaviour
         {
             fillable.FillArea(1);
         }
+
+        if (other.TryGetComponent<StairBase>(out StairBase stairBase))
+        {
+            stairBase.MovePlayer(transform);
+        }
     }
 
     private void OnTriggerExit(Collider other)
