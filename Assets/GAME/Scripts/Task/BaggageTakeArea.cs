@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class LuggageDropArea : MonoBehaviour, IFillable
+public class BaggageTakeArea : MonoBehaviour, IFillable
 {
     [SerializeField] private float speed;
     
