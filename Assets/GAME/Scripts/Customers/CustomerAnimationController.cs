@@ -14,4 +14,9 @@ public class CustomerAnimationController : MonoBehaviour
     {
         animator.SetTrigger(animationName);
     }
+    
+    public void ResetAnimation(string animationName)
+    {
+        animator.ResetTrigger(animationName);
+    }
 }

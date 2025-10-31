@@ -35,10 +35,8 @@ public class MoneySpawner : MonoBehaviour
         int height = 0;
         var money = moneyPool.Spawn();
 
-        if (count % maxAdjacentCount == 0)
-        {
-             height = maxAdjacentCount / count;
-        }
+        height = count / maxAdjacentCount;
+        
         float posY = height * spacingY;
         float posZ = (count % maxAdjacentCount) * spacingZ;
         

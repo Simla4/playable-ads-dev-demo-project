@@ -22,11 +22,16 @@ public class CustomerController : MonoBehaviour
     public bool CanFly { get => canFly; set => canFly = value; }
     public bool InPlane { get => inPlane; set => inPlane = value; }
 
-    public void Move(Transform targetPosition)
+    public void Move(Transform targetPosition, bool isWalking = true)
     {
         DropBaggage();
+
+        if (isWalking)
+        {
+            animationController.ResetAnimation("Idle");
+            animationController.ChangeAnimation("Walk");
+        }
         
-        animationController.ChangeAnimation("Walk");
         transform.rotation = Quaternion.Euler(0, targetPosition.rotation.eulerAngles.y, 0);
         
         float distance = Vector3.Distance(transform.position, targetPosition.position);
@@ -47,7 +52,6 @@ public class CustomerController : MonoBehaviour
                     EventBus<OnCustomerArrivedEvent>.Emit(new OnCustomerArrivedEvent());
                     gameObject.SetActive(false);
                 }
-                
                 NextTarget();
             });
 
@@ -65,14 +69,15 @@ public class CustomerController : MonoBehaviour
 
     private void NextTarget()
     {
+        bool isWalking = targetIndex != 1;
         animationController.ChangeAnimation("Idle");
         
-        if (targetIndex < targets.Count - 1 && isDropedBaggage)
+        if (targetIndex < targets.Count && isDropedBaggage)
         {
-            Move(targets[targetIndex]);
+            Move(targets[targetIndex],  isWalking);
             targetIndex++;
         }
-        else if(targetIndex >= targets.Count - 1 && isDropedBaggage)
+        else if(targetIndex >= targets.Count && isDropedBaggage)
         {
             EventBus<OnTargetListOverEvent>.Emit(new OnTargetListOverEvent());
         }
