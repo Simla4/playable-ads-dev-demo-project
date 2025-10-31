@@ -1,4 +1,5 @@
 
+using sb.eventbus;
 using UnityEngine;
 
 public class BoardUnlockFillArea : FillableAreaBase
@@ -18,6 +19,16 @@ public class BoardUnlockFillArea : FillableAreaBase
         cost = PlayerPrefs.GetInt(BOARD_UNLOCK_FILL_AREA_NAME);
         
         base.Start();
+    }
+
+    public override void FillArea(int amount)
+    {
+        if (cost <= 0)
+        {
+            EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
+        }
+        
+        base.FillArea(amount);
     }
 
     public override void StopFilling()

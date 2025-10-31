@@ -33,7 +33,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
         costText.text = cost.ToString();
     }
 
-    public void FillArea(int amount)
+    public virtual void FillArea(int amount)
     {
         if(cost <= 0) return;
         
@@ -55,9 +55,14 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
             if (cost <= 0)
             {
                 unlockedArea.SetActive(true);
-                EventBus<NewAreaOppenedEvent>.Emit(new NewAreaOppenedEvent(areaType));
+                EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
                 break;
             }
+        }
+
+        if (cost <= 0)
+        {
+            unlockedArea.SetActive(true);EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
         }
     }
 

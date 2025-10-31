@@ -14,22 +14,22 @@ public class CameraManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float duration = 2;
 
-    private EventListener<NewAreaOppenedEvent> onFloorAreaOppened;
+    private EventListener<NewAreaOpenedEvent> onFloorAreaOppened;
     
 
     private void OnEnable()
     {
-        onFloorAreaOppened = new EventListener<NewAreaOppenedEvent>(ChangeCamera);
-        EventBus<NewAreaOppenedEvent>.AddListener(onFloorAreaOppened);
+        onFloorAreaOppened = new EventListener<NewAreaOpenedEvent>(ChangeCamera);
+        EventBus<NewAreaOpenedEvent>.AddListener(onFloorAreaOppened);
     }
 
     private void OnDisable()
     {
-        EventBus<NewAreaOppenedEvent>.RemoveListener(onFloorAreaOppened);
+        EventBus<NewAreaOpenedEvent>.RemoveListener(onFloorAreaOppened);
     }
 
 
-    private void ChangeCamera(NewAreaOppenedEvent e)
+    private void ChangeCamera(NewAreaOpenedEvent e)
     {
         if (e.areaType == FillableAreaTypes.Floor)
         {

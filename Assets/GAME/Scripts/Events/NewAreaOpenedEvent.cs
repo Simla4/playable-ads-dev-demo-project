@@ -1,10 +1,10 @@
 using sb.eventbus;
 
-public class NewAreaOppenedEvent : IEvent
+public class NewAreaOpenedEvent : IEvent
 {
     public FillableAreaTypes areaType;
 
-    public NewAreaOppenedEvent(FillableAreaTypes areaType)
+    public NewAreaOpenedEvent(FillableAreaTypes areaType)
     {
         this.areaType = areaType;  
     }

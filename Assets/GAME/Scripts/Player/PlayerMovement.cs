@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using sb.eventbus;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,12 +11,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private FloatingJoystick floatingJoystick;
     [SerializeField] private PlayerAnimationsController playerAnimationsController;
 
+    private EventListener<NewAreaOpenedEvent> newAreaOpened;
     private Vector3 input;
     private Rigidbody rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void OnEnable()
+    {
+        newAreaOpened = new EventListener<NewAreaOpenedEvent>(CloseJoystick);
+        EventBus<NewAreaOpenedEvent>.AddListener(newAreaOpened);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<NewAreaOpenedEvent>.RemoveListener(newAreaOpened);
     }
 
     void Update()
@@ -36,5 +49,12 @@ public class PlayerMovement : MonoBehaviour
             rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, 0.2f);
         }
         playerAnimationsController.ChangeAnimation("Walk", moveDirection.magnitude);
+    }
+
+    private void CloseJoystick(NewAreaOpenedEvent e)
+    {
+        if(e.areaType != FillableAreaTypes.Board) return;
+        
+        floatingJoystick.gameObject.SetActive(false);
     }
 }
