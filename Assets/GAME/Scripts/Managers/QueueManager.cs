@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using sb.eventbus;
+using TMPro;
 using Unity.VisualScripting;
 
 public class QueueManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class QueueManager : MonoBehaviour
     [SerializeField] private int customerCount = 5;
     [SerializeField] private CustomerController customerPrefab;
     [SerializeField] private Transform queueStartPoint;
+    
+    [SerializeField] private TextMeshPro customerCountTxt;
     
     [Header("Queues")]
     [SerializeField] private List<Transform> baggageQueueList;
@@ -23,6 +26,8 @@ public class QueueManager : MonoBehaviour
     private EventListener<OnGetPlaneEvent> onGetPlane;
     private EventListener<OnTargetListOverEvent> onTargetListOver;
     private int checkOutTargetIndex = 0;
+
+    private int currentCutomerCount;
 
 
     private void Start()
@@ -111,6 +116,9 @@ public class QueueManager : MonoBehaviour
         {
             checkOutQueueCustomers[i].Move(checkOutQueueList[i]);
         }
+        
+        currentCutomerCount++;
+        customerCountTxt.text = currentCutomerCount + "/ " + customerCount;
         
     }
 }

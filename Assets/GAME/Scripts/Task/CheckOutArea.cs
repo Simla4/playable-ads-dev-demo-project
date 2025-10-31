@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using sb.eventbus;
+using TMPro;
 using UnityEngine;
 
 public class CheckOutArea : TaskBase, ITask
@@ -8,6 +9,7 @@ public class CheckOutArea : TaskBase, ITask
     [SerializeField] private float speed;
     
     private bool canContinue = true;
+    
     
 
     public void StartTask()
@@ -24,6 +26,8 @@ public class CheckOutArea : TaskBase, ITask
         while (canContinue)
         {
             EventBus<OnGetPlaneEvent>.Emit(new OnGetPlaneEvent());
+            
+            
             
             yield return new WaitForSeconds(speed);
         }
