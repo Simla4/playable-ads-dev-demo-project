@@ -16,13 +16,17 @@ public class StairBase : TaskBase
     [Header("Settings")] 
     [SerializeField] private float stepSpacing;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float spawnDuration = 0.1f;
 
-    private List<Transform> steps = new List<Transform>();
+    private List<StairStepBase> steps = new List<StairStepBase>();
     private Vector3 moveDirection;
     private float escalatorLength;
     private int stepCount;
     private Tween moveTween;
     private EventListener<NewAreaOpenedEvent> newAreaOpened;
+    private Pool<StairStepBase> stepPool;
+    private WaitForSeconds creationDelay;
+    private Coroutine creationCoroutine;
 
 
     private void OnEnable()
@@ -34,6 +38,12 @@ public class StairBase : TaskBase
     private void OnDisable()
     {
         EventBus<NewAreaOpenedEvent>.RemoveListener(newAreaOpened);
+    }
+
+    private void Start()
+    {
+        stepPool = PoolManager.Instance.stairStepPool;
+        creationDelay = new WaitForSeconds(spawnDuration);
     }
 
     void Update()
@@ -56,22 +66,53 @@ public class StairBase : TaskBase
         for (int i = 0; i < stepCount; i++)
         {
             Vector3 spawnPos = startPosition.position + moveDirection * stepSpacing * i;
-            GameObject step = Instantiate(stepPrefab, spawnPos, Quaternion.identity, transform.parent);
-            steps.Add(step.transform);
+            CreateStep(spawnPos);
         }
+
+        if (creationCoroutine != null)
+        {
+            StopCoroutine(creationCoroutine);
+        }
+        
+        creationCoroutine = StartCoroutine(StepCreator());
+    }
+
+    private IEnumerator StepCreator()
+    {
+        while (true)
+        {
+            if(transform.localScale.x < 1) yield return null;
+
+            yield return creationDelay;
+
+            CreateStep(startPosition.position);
+        }
+    }
+
+    private void CreateStep(Vector3 spawnPos)
+    {
+        var step = stepPool.Spawn();
+        step.transform.position = spawnPos;
+        step.transform.rotation = Quaternion.identity;
+        step.transform.SetParent(transform.parent);
+        step.transform.localScale = Vector3.one;
+        steps.Add(step);
     }
     
     private void MoveSteps()
     {
-        for (int i = 0; i < steps.Count; i++)
+        var temp = new List<StairStepBase>(steps);
+        
+        for (int i = 0; i < temp.Count; i++)
         {
-            Transform step = steps[i];
-            step.position += moveDirection * moveSpeed * Time.deltaTime;
+            var step = temp[i];
+            step.transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
-            float distanceFromStart = Vector3.Distance(startPosition.position, step.position);
+            float distanceFromStart = Vector3.Distance(startPosition.position, step.transform.position);
             if (distanceFromStart > escalatorLength)
             {
-                step.position = startPosition.position;
+                steps.Remove(step);
+                stepPool.ReturnToPool(step);
             }
         }
     }

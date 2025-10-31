@@ -22,6 +22,7 @@ public abstract class FillableAreaBase : TaskBase, IFillable
     [Header("Settings")]
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float duration = 0.5f;
+    [SerializeField] private float fillDuration = 0.05f;
     
     private bool canContinueFilling = true;
     private Tween unlockTween;
@@ -67,7 +68,7 @@ public abstract class FillableAreaBase : TaskBase, IFillable
         
         while (canContinueFilling && CurencyManager.Instance.GetCurency() > 0)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(fillDuration);
             cost -= amount;
             EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(-1));
             costText.text = cost.ToString();
