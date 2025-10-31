@@ -8,6 +8,7 @@ public class PlayerBaggageController : MonoBehaviour
 {
     [SerializeField] private Transform targetBaggagePosition;
     [SerializeField] private float spacing = 0.5f;
+    [SerializeField] private PlayerAnimationsController playerAnimationsController;
     
     private List<Baggage> baggages = new List<Baggage>();
     private EventListener<TakeBaggageEvent> onTakeBaggage;
@@ -31,6 +32,7 @@ public class PlayerBaggageController : MonoBehaviour
 
     private void TakeBaggage(TakeBaggageEvent e)
     {
+        playerAnimationsController.ChangeLayer(1, 1);
         baggages.Add(e.baggage);
         e.baggage.transform.SetParent(gameObject.transform);
         e.baggage.transform.position = targetBaggagePosition.position + Vector3.up * spacing * baggages.Count;
@@ -49,6 +51,7 @@ public class PlayerBaggageController : MonoBehaviour
         if (baggages.Count <= 0)
         {
             EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+            playerAnimationsController.ChangeLayer(1, 0);
         }
     }
 }

@@ -14,4 +14,9 @@ public class PlayerAnimationsController : MonoBehaviour
     {
         animator.SetFloat(animationName, speed);
     }
+
+    public void ChangeLayer(int layerIndex, float layerWeight)
+    {
+        animator.SetLayerWeight(layerIndex, layerWeight);
+    }
 }
