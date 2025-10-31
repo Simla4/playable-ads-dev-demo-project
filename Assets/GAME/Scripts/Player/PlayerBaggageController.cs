@@ -36,6 +36,7 @@ public class PlayerBaggageController : MonoBehaviour
         baggages.Add(e.baggage);
         e.baggage.transform.SetParent(gameObject.transform);
         e.baggage.transform.position = targetBaggagePosition.position + Vector3.up * spacing * baggages.Count;
+        e.baggage.transform.rotation = targetBaggagePosition.rotation;
     }
 
     private void DropBaggage( DropBaggageEvent e)
