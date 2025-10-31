@@ -50,7 +50,7 @@ public class StairBase : TaskBase
         moveDirection = (endPosition.position - startPosition.position).normalized;
         escalatorLength = Vector3.Distance(startPosition.position, endPosition.position);
 
-        int stepCount = Mathf.FloorToInt(escalatorLength / stepSpacing);
+        int stepCount = Mathf.FloorToInt(escalatorLength / stepSpacing) + 1;
 
         for (int i = 0; i < stepCount; i++)
         {
