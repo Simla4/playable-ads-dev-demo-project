@@ -17,6 +17,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
     private bool canContinueFilling = true;
     private Tween unlockTween;
     protected int cost;
+    protected FillableAreaTypes areaType;
 
     protected void Start()
     {
@@ -54,6 +55,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
             if (cost <= 0)
             {
                 unlockedArea.SetActive(true);
+                EventBus<NewAreaOppenedEvent>.Emit(new NewAreaOppenedEvent(areaType));
                 break;
             }
         }

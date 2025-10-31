@@ -9,6 +9,7 @@ public class FloorUnlockFillArea : FillableAreaBase
     
     protected new void Start()
     {
+        areaType = FillableAreaTypes.Floor;
         
         if (!PlayerPrefs.HasKey(FLOOR_UNLOCK_FILL_AREA_NAME))
         {
