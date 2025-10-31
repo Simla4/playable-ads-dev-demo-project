@@ -21,6 +21,7 @@ public class TaskManager : MonoBehaviour
     private void Start()
     {
         tasks[index].ActivateTask();
+        EventBus<OnTaskChangedEvent>.Emit(new OnTaskChangedEvent(tasks[index].transform));
     }
 
     private void OnDisable()
@@ -39,6 +40,6 @@ public class TaskManager : MonoBehaviour
         if(index >= tasks.Count) return;
         tasks[index].ActivateTask();
         
-        Debug.Log("task activated" + index);
+        EventBus<OnTaskChangedEvent>.Emit(new OnTaskChangedEvent(tasks[index].transform));
     }
 }

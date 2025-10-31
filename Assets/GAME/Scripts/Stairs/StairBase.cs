@@ -5,7 +5,7 @@ using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
 
-public class StairBase : MonoBehaviour
+public class StairBase : TaskBase
 {
     [Header("References")] [SerializeField]
     private Transform startPosition;
@@ -90,6 +90,12 @@ public class StairBase : MonoBehaviour
 
         moveTween = player.transform.DOMove(endPosition.position + new Vector3(0.5f, 0, 0), duration)
             .SetEase(Ease.Linear)
-            .OnComplete(() => joystick.gameObject.SetActive(true));
+            .OnComplete(() => OnMoveComplete());
+    }
+
+    private void OnMoveComplete()
+    {
+        joystick.gameObject.SetActive(true);
+        EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
     }
 }
