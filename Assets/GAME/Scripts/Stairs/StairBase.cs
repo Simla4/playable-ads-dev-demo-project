@@ -13,7 +13,8 @@ public class StairBase : TaskBase
     [SerializeField] private GameObject stepPrefab;
     [SerializeField] private FloatingJoystick joystick;
 
-    [Header("Settings")] [SerializeField] private float stepSpacing;
+    [Header("Settings")] 
+    [SerializeField] private float stepSpacing;
     [SerializeField] private float moveSpeed;
 
     private List<Transform> steps = new List<Transform>();
