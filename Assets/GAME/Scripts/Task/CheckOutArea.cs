@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class CheckOutArea : MonoBehaviour, IFillable
+public class CheckOutArea : TaskBase, ITask
 {
     [SerializeField] private float speed;
     
     private bool canContinue = true;
     
-    public void FillArea(int amount)
+
+    public void StartTask()
     {
         StartCoroutine(TakeBaggageRoutine());
         Debug.Log("FillArea");
     }
-
+    
     private IEnumerator TakeBaggageRoutine()
     {
         canContinue = true;
@@ -28,7 +29,7 @@ public class CheckOutArea : MonoBehaviour, IFillable
         }
     }
 
-    public void StopFilling()
+    public void StopTask()
     {
         canContinue = false;
     }

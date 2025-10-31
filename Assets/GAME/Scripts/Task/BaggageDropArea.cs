@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class BaggageDropArea : MonoBehaviour, IFillable
+public class BaggageDropArea : TaskBase, ITask
 {
     [Header("Settings")]
     [SerializeField] private float speed;
@@ -35,12 +35,6 @@ public class BaggageDropArea : MonoBehaviour, IFillable
         EventBus<BaggageTransferEvent>.RemoveListener(onBaggageTransfered);
     }
 
-
-    public void FillArea(int amount)
-    {
-        StartCoroutine(TakeBaggageRoutine());
-    }
-
     private IEnumerator TakeBaggageRoutine()
     {
         canContinueTakingBaggage = true;
@@ -53,7 +47,12 @@ public class BaggageDropArea : MonoBehaviour, IFillable
         }
     }
 
-    public void StopFilling()
+    public void StartTask()
+    {
+        StartCoroutine(TakeBaggageRoutine());
+    }
+
+    public void StopTask()
     {
         canContinueTakingBaggage = false;
     }
@@ -77,6 +76,11 @@ public class BaggageDropArea : MonoBehaviour, IFillable
         var targetBaggage = baggages[0];
         targetBaggage.Move(endTransform, speed);
         baggages.RemoveAt(0);
+
+        if (baggages.Count <= 0)
+        {
+            EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+        }
 
         for (int i = 0; i < baggages.Count; i++)
         {

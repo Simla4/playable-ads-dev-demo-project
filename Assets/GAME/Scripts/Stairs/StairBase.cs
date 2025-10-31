@@ -51,14 +51,11 @@ public class StairBase : MonoBehaviour
         escalatorLength = Vector3.Distance(startPosition.position, endPosition.position);
 
         int stepCount = Mathf.FloorToInt(escalatorLength / stepSpacing);
-        
-        Debug.Log("Step count: "+stepCount + ", Escalator Length: " + escalatorLength);
 
         for (int i = 0; i < stepCount; i++)
         {
             Vector3 spawnPos = startPosition.position + moveDirection * stepSpacing * i;
             GameObject step = Instantiate(stepPrefab, spawnPos, Quaternion.identity, transform.parent);
-            Debug.Log(spawnPos);
             steps.Add(step.transform);
         }
     }

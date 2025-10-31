@@ -71,6 +71,11 @@ public class QueueManager : MonoBehaviour
         checkOutQueueCustomers.Add(targetCustomer);
         baggageQueueCustomers.RemoveAt(0);
 
+        if (baggageQueueCustomers.Count <= 0)
+        {
+            EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+        }
+
         for (int i = 0; i < baggageQueueCustomers.Count; i++)
         {
             baggageQueueCustomers[i].Move(baggageQueueList[i]);
@@ -94,6 +99,12 @@ public class QueueManager : MonoBehaviour
         
         targetCustomer.Move(planePosition);
         checkOutQueueCustomers.RemoveAt(0);
+
+        if (checkOutQueueCustomers.Count <= 0)
+        {
+            EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+        }
+        
         EventBus<SpawnMoneyEvent>.Emit(new SpawnMoneyEvent());
 
         for (int i = 0; i < checkOutQueueCustomers.Count; i++)

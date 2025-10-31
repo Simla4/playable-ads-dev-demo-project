@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public abstract class FillableAreaBase : MonoBehaviour, IFillable
+public abstract class FillableAreaBase : TaskBase, IFillable
 {
     [Header("References")]
     [SerializeField] protected FillableAreaData fillableAreaData;
@@ -46,6 +46,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
             canvasGroup.gameObject.SetActive(false);
             
             EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
+            EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
         }
         
         costText.text = cost.ToString();
@@ -74,6 +75,7 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
 
             if (cost <= 0)
             {
+                EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
                 StartCoroutine(UnlockAnim());
                 arrowGameObject.SetActive(false);
                 CanvasAnimation(0);

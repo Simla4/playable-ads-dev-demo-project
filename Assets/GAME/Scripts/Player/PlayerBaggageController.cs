@@ -45,5 +45,10 @@ public class PlayerBaggageController : MonoBehaviour
         EventBus<PlaceToDeviceEvent>.Emit(new PlaceToDeviceEvent(baggages[index]));
         
         baggages.RemoveAt(index);
+        
+        if (baggages.Count <= 0)
+        {
+            EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+        }
     }
 }

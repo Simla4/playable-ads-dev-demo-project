@@ -12,6 +12,10 @@ public class PlayerCollisionController : MonoBehaviour
         {
             fillable.FillArea(1);
         }
+        else if(other.TryGetComponent<ITask>(out ITask task))
+        {
+            task.StartTask();
+        }
         else if (other.TryGetComponent<ICollectible>(out ICollectible collectible))
         {
             collectible.OnCollect();
@@ -28,6 +32,10 @@ public class PlayerCollisionController : MonoBehaviour
         if (other.TryGetComponent<IFillable>(out IFillable fillable))
         {
             fillable.StopFilling();
+        }
+        else if(other.TryGetComponent<ITask>(out ITask task))
+        {
+            task.StopTask();
         }
     }
 }

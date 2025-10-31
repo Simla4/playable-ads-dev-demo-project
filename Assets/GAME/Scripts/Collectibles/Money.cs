@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class Money : MonoBehaviour, ICollectible, IPool
 {
+    [Header("References")] 
+    [SerializeField] private ParticleSystem moneyParticle;
+    
+    [Header("Settings")]
     [SerializeField] private int moneyValue;
     [SerializeField] private float duration;
     
@@ -23,6 +27,7 @@ public class Money : MonoBehaviour, ICollectible, IPool
     public void OnCollect()
     {
         EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(moneyValue));
+        moneyParticle.Play();
         moneyPool.ReturnToPool(this);
     }
 
@@ -38,7 +43,7 @@ public class Money : MonoBehaviour, ICollectible, IPool
 
     public void OnPoolObjectSpawn()
     {
-        
+        moneyParticle.Stop();
         MoneyAnimation(Vector3.one);
     }
 

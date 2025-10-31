@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class BaggageTakeArea : MonoBehaviour, IFillable
+public class BaggageTakeArea : TaskBase, ITask
 {
     [SerializeField] private float speed;
     
     private bool canContinueTakingBaggage = true;
     
-    public void FillArea(int amount)
+    public void StartTask()
     {
         StartCoroutine(TakeBaggageRoutine());
     }
@@ -26,7 +26,7 @@ public class BaggageTakeArea : MonoBehaviour, IFillable
         }
     }
 
-    public void StopFilling()
+    public void StopTask()
     {
         canContinueTakingBaggage = false;
     }
