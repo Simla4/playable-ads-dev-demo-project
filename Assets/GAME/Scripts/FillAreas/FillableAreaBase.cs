@@ -4,18 +4,28 @@ using System.Collections.Generic;
 using DG.Tweening;
 using sb.eventbus;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public abstract class FillableAreaBase : MonoBehaviour, IFillable
 {
+    [Header("References")]
     [SerializeField] protected FillableAreaData fillableAreaData;
     [SerializeField] private TextMeshProUGUI costText;
-    [SerializeField] private GameObject unlockedArea;
+    [SerializeField] private List<GameObject> unlockAreas;
     [SerializeField] private Image progressImage;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject arrowGameObject;
+    
+    [Header("Settings")]
+    [SerializeField] private float fadeDuration = 0.25f;
+    [SerializeField] private float duration = 0.5f;
     
     private bool canContinueFilling = true;
     private Tween unlockTween;
+    private Tween canvasTween;
     protected int cost;
     protected FillableAreaTypes areaType;
 
@@ -28,8 +38,14 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
     {
         if (cost <= 0)
         {
-            unlockedArea.SetActive(true);
+            for (int i = 0; i < unlockAreas.Count; i++)
+            {
+                unlockAreas[i].transform.localScale = Vector3.one;
+            }
+            
+            canvasGroup.gameObject.SetActive(false);
         }
+        
         costText.text = cost.ToString();
     }
 
@@ -44,6 +60,8 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
     {
         canContinueFilling = true;
         
+        CanvasAnimation(1);
+        
         while (canContinueFilling && CurencyManager.Instance.GetCurency() > 0)
         {
             yield return new WaitForSeconds(0.1f);
@@ -54,15 +72,11 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
 
             if (cost <= 0)
             {
-                unlockedArea.SetActive(true);
-                EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
+                StartCoroutine(UnlockAnim());
+                arrowGameObject.SetActive(false);
+                CanvasAnimation(0);
                 break;
             }
-        }
-
-        if (cost <= 0)
-        {
-            unlockedArea.SetActive(true);EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
         }
     }
 
@@ -78,8 +92,31 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
         canContinueFilling = false;
     }
 
-    private void UnlockAnim()
+    private IEnumerator UnlockAnim()
     {
+        for (var i = 0; i < unlockAreas.Count; i++)
+        {
+            if (unlockTween != null)
+            {
+                unlockTween.Kill();
+            }
+            
+            unlockTween = unlockAreas[i].transform.DOScale(Vector3.one, duration)
+                .SetEase(Ease.OutBounce)
+                .OnComplete(()=>
+                    EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType)));
+            
+            yield return new WaitForSeconds(duration);
+        }
+    }
+    
+    private void CanvasAnimation(float endValue)
+    {
+        if (canvasTween != null)
+        {
+            canvasTween.Kill();
+        }
         
+        canvasTween = canvasGroup.DOFade(endValue, fadeDuration);
     }
 }

@@ -1,5 +1,6 @@
 
 using System;
+using sb.eventbus;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,6 +21,16 @@ public class FloorUnlockFillArea : FillableAreaBase
         cost = PlayerPrefs.GetInt(FLOOR_UNLOCK_FILL_AREA_NAME);
         
         base.Start();
+    }
+
+    public override void FillArea(int amount)
+    {
+        base.FillArea(amount);
+        
+        if (cost <= 0)
+        {
+            EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
+        }
     }
 
     public override void StopFilling()
