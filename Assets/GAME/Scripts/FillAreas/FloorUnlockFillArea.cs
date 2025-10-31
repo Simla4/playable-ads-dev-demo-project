@@ -23,16 +23,6 @@ public class FloorUnlockFillArea : FillableAreaBase
         base.Start();
     }
 
-    public override void FillArea(int amount)
-    {
-        base.FillArea(amount);
-        
-        if (cost <= 0)
-        {
-            EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
-        }
-    }
-
     public override void StopFilling()
     {
         base.StopFilling();

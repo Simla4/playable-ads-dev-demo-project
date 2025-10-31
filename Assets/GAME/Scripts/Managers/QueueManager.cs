@@ -94,6 +94,7 @@ public class QueueManager : MonoBehaviour
         
         targetCustomer.Move(planePosition);
         checkOutQueueCustomers.RemoveAt(0);
+        EventBus<SpawnMoneyEvent>.Emit(new SpawnMoneyEvent());
 
         for (int i = 0; i < checkOutQueueCustomers.Count; i++)
         {

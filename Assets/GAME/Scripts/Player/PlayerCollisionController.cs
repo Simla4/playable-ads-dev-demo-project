@@ -12,6 +12,10 @@ public class PlayerCollisionController : MonoBehaviour
         {
             fillable.FillArea(1);
         }
+        else if (other.TryGetComponent<ICollectible>(out ICollectible collectible))
+        {
+            collectible.OnCollect();
+        }
 
         if (other.TryGetComponent<StairBase>(out StairBase stairBase))
         {

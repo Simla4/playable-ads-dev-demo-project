@@ -6,7 +6,6 @@ using UnityEngine;
 public class CheckOutArea : MonoBehaviour, IFillable
 {
     [SerializeField] private float speed;
-    [SerializeField] private int prize;
     
     private bool canContinue = true;
     
@@ -24,7 +23,6 @@ public class CheckOutArea : MonoBehaviour, IFillable
         while (canContinue)
         {
             EventBus<OnGetPlaneEvent>.Emit(new OnGetPlaneEvent());
-            EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(prize));
             
             yield return new WaitForSeconds(speed);
         }

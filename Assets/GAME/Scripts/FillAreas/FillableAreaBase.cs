@@ -44,6 +44,8 @@ public abstract class FillableAreaBase : MonoBehaviour, IFillable
             }
             
             canvasGroup.gameObject.SetActive(false);
+            
+            EventBus<NewAreaOpenedEvent>.Emit(new NewAreaOpenedEvent(areaType));
         }
         
         costText.text = cost.ToString();
