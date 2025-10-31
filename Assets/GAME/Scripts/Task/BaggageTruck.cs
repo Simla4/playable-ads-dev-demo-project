@@ -17,14 +17,12 @@ public class BaggageTruck : MonoBehaviour
     private List<GameObject> baggages = new List<GameObject>();
     private EventListener<AllBaggagesTransferredEvent> onAllBaggagesTransferred;
     private bool canMove = true;
-    private Vector2 startPosition;
+    private Vector3 startPosition;
     private Tween moveTween;
 
 
     private void OnEnable()
     {
-        startPosition = parenTransform.position;
-        
         onAllBaggagesTransferred = new EventListener<AllBaggagesTransferredEvent>(Move);
         EventBus<AllBaggagesTransferredEvent>.AddListener(onAllBaggagesTransferred);
     }
@@ -51,6 +49,7 @@ public class BaggageTruck : MonoBehaviour
         if(!canMove) return;
         
         canMove = false;
+        startPosition = parenTransform.position;
         
         if (moveTween != null)
         {

@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetBaggagePosition: {fileID: 8614669500180841991}
   spacing: 0.5
-  playerAnimationsController: {fileID: 0}
+  playerAnimationsController: {fileID: 931815914856188461}
 --- !u!114 &3474647926240575794
 MonoBehaviour:
   m_ObjectHideFlags: 0
