@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class PlayerBaggageController : MonoBehaviour
     private List<Baggage> baggages = new List<Baggage>();
     private EventListener<TakeBaggageEvent> onTakeBaggage;
     private EventListener<DropBaggageEvent> onDropBaggage;
+    private Tween takeTween;
 
     private void OnEnable()
     {
@@ -32,10 +34,15 @@ public class PlayerBaggageController : MonoBehaviour
 
     private void TakeBaggage(TakeBaggageEvent e)
     {
+        if (takeTween != null)
+        {
+            takeTween.Kill();
+        }
+        
         playerAnimationsController.ChangeLayer(1, 1);
         baggages.Add(e.baggage);
-        e.baggage.transform.SetParent(gameObject.transform);
-        e.baggage.transform.position = targetBaggagePosition.position + Vector3.up * spacing * baggages.Count;
+        e.baggage.transform.SetParent(targetBaggagePosition);
+         e.baggage.transform.DOLocalJump(Vector3.right * spacing * baggages.Count, 0.5f, 1, 0.15f).SetEase(Ease.InOutSine);
         e.baggage.transform.rotation = targetBaggagePosition.rotation;
     }
 
