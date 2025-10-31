@@ -12,8 +12,6 @@ public class QueueManager : MonoBehaviour
     [SerializeField] private CustomerController customerPrefab;
     [SerializeField] private Transform queueStartPoint;
     
-    [SerializeField] private TextMeshPro customerCountTxt;
-    
     [Header("Queues")]
     [SerializeField] private List<Transform> baggageQueueList;
     [SerializeField] private List<Transform> checkOutQueueList;
@@ -26,8 +24,6 @@ public class QueueManager : MonoBehaviour
     private EventListener<OnGetPlaneEvent> onGetPlane;
     private EventListener<OnTargetListOverEvent> onTargetListOver;
     private int checkOutTargetIndex = 0;
-
-    private int currentCutomerCount;
 
 
     private void Start()
@@ -102,6 +98,7 @@ public class QueueManager : MonoBehaviour
         
         if(!targetCustomer.CanFly) return;
         
+        targetCustomer.InPlane = true;
         targetCustomer.Move(planePosition);
         checkOutQueueCustomers.RemoveAt(0);
 
@@ -116,9 +113,6 @@ public class QueueManager : MonoBehaviour
         {
             checkOutQueueCustomers[i].Move(checkOutQueueList[i]);
         }
-        
-        currentCutomerCount++;
-        customerCountTxt.text = currentCutomerCount + "/ " + customerCount;
         
     }
 }

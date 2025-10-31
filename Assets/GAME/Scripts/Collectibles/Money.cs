@@ -26,8 +26,9 @@ public class Money : MonoBehaviour, ICollectible, IPool
 
     public void OnCollect()
     {
-        EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(moneyValue));
+        moneyParticle.transform.SetParent(null);
         moneyParticle.Play();
+        EventBus<CurencyManagementEvent>.Emit(new CurencyManagementEvent(moneyValue));
         moneyPool.ReturnToPool(this);
     }
 

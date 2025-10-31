@@ -13,11 +13,14 @@ public class CustomerController : MonoBehaviour
     
     private int targetIndex = 0;
     private Tween moveTween;
+    private Tween scaleTween;
     private bool isDropedBaggage = false;
     private bool canFly = false;
+    private bool inPlane = false;
     
     public bool IsDropedBaggage {set => isDropedBaggage = value; }
     public bool CanFly { get => canFly; set => canFly = value; }
+    public bool InPlane { get => inPlane; set => inPlane = value; }
 
     public void Move(Transform targetPosition)
     {
@@ -37,7 +40,18 @@ public class CustomerController : MonoBehaviour
 
         moveTween = transform.DOMove(targetPosition.position, duration)
             .SetEase(Ease.Linear)
-            .OnComplete(() => NextTarget());
+            .OnComplete(() =>
+            {
+                if (inPlane)
+                {
+                    EventBus<OnCustomerArrivedEvent>.Emit(new OnCustomerArrivedEvent());
+                    gameObject.SetActive(false);
+                }
+                
+                NextTarget();
+            });
+
+        
     }
 
     private void DropBaggage()
