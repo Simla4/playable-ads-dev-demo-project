@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99a0da97bd454b66b996c2725bbb0e1, type: 3}
   m_Name: FillableAreaPaintBoaardData
   m_EditorClassIdentifier: 
-  targetCost: 0
+  targetCost: 60
