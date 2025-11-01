@@ -8,7 +8,7 @@ public abstract class TaskBase : MonoBehaviour
 {
     [Header("Task References")]
     [SerializeField] private Image taskImage;
-    [SerializeField] private BoxCollider collider;
+    [SerializeField] protected BoxCollider collider;
     
     [Header("Settings")]
     [SerializeField] private float maxScale = 1.25f;
@@ -18,7 +18,7 @@ public abstract class TaskBase : MonoBehaviour
     private Tween scaleTween;
     private Tween colorTween;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         collider.enabled = false;
     }

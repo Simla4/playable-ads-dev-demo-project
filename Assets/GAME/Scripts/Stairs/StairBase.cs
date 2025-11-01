@@ -17,6 +17,7 @@ public class StairBase : TaskBase
     [SerializeField] private float stepSpacing;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float spawnDuration = 0.1f;
+    [SerializeField] private bool isTaskEnabled;
 
     private List<StairStepBase> steps = new List<StairStepBase>();
     private Vector3 moveDirection;
@@ -27,7 +28,12 @@ public class StairBase : TaskBase
     private Pool<StairStepBase> stepPool;
     private WaitForSeconds creationDelay;
     private Coroutine creationCoroutine;
+    private bool isTaskCompleted = false;
 
+    protected override void Awake()
+    {
+        collider.enabled = !isTaskEnabled;
+    }
 
     private void OnEnable()
     {
@@ -138,6 +144,10 @@ public class StairBase : TaskBase
     private void OnMoveComplete()
     {
         joystick.gameObject.SetActive(true);
+        
+        if(isTaskCompleted || !isTaskEnabled) return;
+        
         EventBus<OnTaskCompleteEvent>.Emit(new OnTaskCompleteEvent());
+        isTaskCompleted = true;
     }
 }
